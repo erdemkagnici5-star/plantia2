@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Camera, Leaf, Heart, ArrowRight } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
@@ -59,6 +60,7 @@ export default function OnboardingScreen() {
   };
 
   const handleFinish = () => {
+    AsyncStorage.setItem('hasSeenOnboarding', 'true');
     router.replace('/(tabs)');
   };
 
