@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Camera, Leaf, BookOpen, Bell, Sparkles } from 'lucide-react-native';
+import { Camera, Leaf, Bell, Sparkles, Image as ImageIcon } from 'lucide-react-native';
+import { Alert } from 'react-native';
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
   const recentIdentifications = [
@@ -9,6 +11,37 @@ export default function HomeScreen() {
     { id: 2, name: 'Ficus Lyrata', image: 'https://images.pexels.com/photos/6208087/pexels-photo-6208087.jpeg?auto=compress&cs=tinysrgb&w=200' },
     { id: 3, name: 'Snake Plant', image: 'https://images.pexels.com/photos/6208088/pexels-photo-6208088.jpeg?auto=compress&cs=tinysrgb&w=200' },
   ];
+
+  const handlePlantIdentification = () => {
+    Alert.alert(
+      'Bitki Tanımlama',
+      'Nasıl bir fotoğraf kullanmak istiyorsunuz?',
+      [
+        {
+          text: 'Kamera',
+          onPress: () => {
+            // Kamera açma işlemi burada yapılacak
+            console.log('Kamera açılıyor...');
+          },
+        },
+        {
+          text: 'Galeri',
+          onPress: () => {
+            // Galeri açma işlemi burada yapılacak
+            console.log('Galeri açılıyor...');
+          },
+        },
+        {
+          text: 'İptal',
+          style: 'cancel',
+        },
+      ]
+    );
+  };
+
+  const handlePremiumUpgrade = () => {
+    router.push('/paywall');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,7 +58,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Main Action Card */}
-        <TouchableOpacity style={styles.mainCard}>
+        <TouchableOpacity style={styles.mainCard} onPress={handlePlantIdentification}>
           <LinearGradient
             colors={['#22C55E', '#16A34A']}
             style={styles.gradientCard}
@@ -56,10 +89,10 @@ export default function HomeScreen() {
             
             <TouchableOpacity style={styles.featureCard}>
               <View style={styles.featureIcon}>
-                <BookOpen size={24} color="#16A34A" />
+                <ImageIcon size={24} color="#16A34A" />
               </View>
-              <Text style={styles.featureTitle}>Ansiklopedi</Text>
-              <Text style={styles.featureSubtitle}>Detaylı bitki bilgileri</Text>
+              <Text style={styles.featureTitle}>Galeri</Text>
+              <Text style={styles.featureSubtitle}>Kayıtlı fotoğraflardan seç</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -78,7 +111,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Premium Banner */}
-        <TouchableOpacity style={styles.premiumBanner}>
+        <TouchableOpacity style={styles.premiumBanner} onPress={handlePremiumUpgrade}>
           <LinearGradient
             colors={['#FEF3C7', '#FDE68A']}
             style={styles.premiumGradient}

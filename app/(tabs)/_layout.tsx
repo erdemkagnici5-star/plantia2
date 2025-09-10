@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Camera, Chrome as Home, Book, Heart, User } from 'lucide-react-native';
+import { Chrome as Home, Heart, User } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -27,24 +27,6 @@ export default function TabLayout() {
           title: 'Ana Sayfa',
           tabBarIcon: ({ size, color }) => (
             <Home size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="camera"
-        options={{
-          title: 'Tanıma',
-          tabBarIcon: ({ size, color }) => (
-            <Camera size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="encyclopedia"
-        options={{
-          title: 'Ansiklopedi',
-          tabBarIcon: ({ size, color }) => (
-            <Book size={size} color={color} />
           ),
         }}
       />

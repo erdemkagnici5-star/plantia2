@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { User, Settings, Bell, Crown, CircleHelp as HelpCircle, Star, LogOut, ChevronRight, Mail, ToggleLeft as Google } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 
 export default function ProfileScreen() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -15,12 +16,23 @@ export default function ProfileScreen() {
   ];
 
   const menuItems = [
-    { id: 1, title: 'Premium\'a Geç', subtitle: 'Sınırsız özellikler', icon: Crown, color: '#F59E0B', isPremium: true },
+    { id: 1, title: 'Premium\'a Geç', subtitle: 'Sınırsız özellikler', icon: Crown, color: '#F59E0B', isPremium: true, action: 'premium' },
     { id: 2, title: 'Bildirimler', subtitle: 'Bakım hatırlatıcıları', icon: Bell, color: '#3B82F6', hasSwitch: true },
     { id: 3, title: 'Ayarlar', subtitle: 'Uygulama tercihleri', icon: Settings, color: '#6B7280' },
     { id: 4, title: 'Yardım & Destek', subtitle: 'SSS ve iletişim', icon: HelpCircle, color: '#16A34A' },
     { id: 5, title: 'Uygulamayı Değerlendir', subtitle: 'App Store\'da değerlendir', icon: Star, color: '#F59E0B' },
   ];
+
+  const handleMenuItemPress = (item: any) => {
+    if (item.action === 'premium') {
+      router.push('/paywall');
+    }
+    // Diğer menu item işlemleri burada yapılabilir
+  };
+
+  const handlePremiumCardPress = () => {
+    router.push('/paywall');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,7 +74,7 @@ export default function ProfileScreen() {
 
         {/* Premium Card */}
         {!isPremium && (
-          <TouchableOpacity style={styles.premiumCard}>
+          <TouchableOpacity style={styles.premiumCard} onPress={handlePremiumCardPress}>
             <LinearGradient
               colors={['#FEF3C7', '#FDE68A']}
               style={styles.premiumGradient}
@@ -84,7 +96,7 @@ export default function ProfileScreen() {
         {/* Menu Items */}
         <View style={styles.menuContainer}>
           {menuItems.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.menuItem}>
+            <TouchableOpacity key={item.id} style={styles.menuItem} onPress={() => handleMenuItemPress(item)}>
               <View style={styles.menuItemLeft}>
                 <View style={[styles.menuIcon, { backgroundColor: item.color + '20' }]}>
                   <item.icon size={20} color={item.color} />
