@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Camera, Leaf, Bell, Sparkles, Image as ImageIcon } from 'lucide-react-native';
 import { Alert } from 'react-native';
 import { router } from 'expo-router';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function HomeScreen() {
   const recentIdentifications = [
@@ -19,20 +20,87 @@ export default function HomeScreen() {
       [
         {
           text: 'Kamera',
-          onPress: () => {
-            // Kamera açma işlemi burada yapılacak
-            console.log('Kamera açılıyor...');
-          },
+          onPress: openCamera,
         },
         {
           text: 'Galeri',
-          onPress: () => {
-            // Galeri açma işlemi burada yapılacak
-            console.log('Galeri açılıyor...');
-          },
+          onPress: openGallery,
         },
         {
           text: 'İptal',
+          style: 'cancel',
+        },
+      ]
+    );
+  };
+
+  const openCamera = async () => {
+    try {
+      // Kamera izni iste
+      const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+      
+      if (cameraPermission.status !== 'granted') {
+        Alert.alert('İzin Gerekli', 'Kamera kullanmak için izin vermeniz gerekiyor.');
+        return;
+      }
+
+      // Kamerayı aç
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        // Fotoğraf çekildi, analiz simülasyonu
+        simulateAnalysis(result.assets[0].uri);
+      }
+    } catch (error) {
+      Alert.alert('Hata', 'Kamera açılırken bir hata oluştu.');
+    }
+  };
+
+  const openGallery = async () => {
+    try {
+      // Galeri izni iste
+      const galleryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      
+      if (galleryPermission.status !== 'granted') {
+        Alert.alert('İzin Gerekli', 'Galeri erişimi için izin vermeniz gerekiyor.');
+        return;
+      }
+
+      // Galeriyi aç
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        // Fotoğraf seçildi, analiz simülasyonu
+        simulateAnalysis(result.assets[0].uri);
+      }
+    } catch (error) {
+      Alert.alert('Hata', 'Galeri açılırken bir hata oluştu.');
+    }
+  };
+
+  const simulateAnalysis = (imageUri: string) => {
+    Alert.alert(
+      'Analiz Tamamlandı! 🌿',
+      'Monstera Deliciosa\n\nGüven: %94\nTür: İç Mekan Bitkisi\nBakım: Orta seviye\nSulama: Haftada 1-2 kez\nIşık: Parlak, dolaylı ışık',
+      [
+        {
+          text: 'Bitkilerime Ekle',
+          onPress: () => {
+            Alert.alert('Başarılı!', 'Bitki koleksiyonunuza eklendi.');
+          },
+        },
+        {
+          text: 'Tamam',
           style: 'cancel',
         },
       ]
